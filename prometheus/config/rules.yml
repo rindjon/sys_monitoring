@@ -1,0 +1,62 @@
+# groups:
+# - name: node-exporter-custom-rules
+#   rules:
+#     - record: node::cpu::usage::percent
+#       expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+#     - record: node::memory::MemUsed::percent
+#       expr: 100 - (100 * node_memory_MemFree_bytes / node_memory_MemTotal_bytes)
+#     - record: node::filesystem::free::percent
+#       expr: 100 * node_filesystem_free_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}
+#     - record: node::filesystem::used::percent
+#       expr: 100 - (100 * node_filesystem_free_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"})
+# - name: node-exporter-custom-alerts
+#   rules:
+#     - alert: InstanceDown
+#       expr: up == 0
+#       for: 1m
+#       labels:
+#         severity: critical
+#       annotations:
+#         summary: "Instance [{{ $labels.instance }}] is down"
+#         description: "[{{ $labels.instance }}] of job [{{ $labels.job }}] has been down for more than 1 minutes."
+#     - alert: HighCPUUsage
+#       expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+#       for: 1m
+#       labels:
+#         severity: warning
+#       annotations:
+#         summary: "Instance {{ $labels.instance }} high CPU usage"
+#         description: "CPU usage is above 90% for more than 1 minutes on instance {{ $labels.instance }}."
+#     - alert: HighMemoryUsage
+#       expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 90
+#       for: 2m
+#       labels:
+#         severity: warning
+#       annotations:
+#         summary: "Instance {{ $labels.instance }} high memory usage"
+#         description: "Memory usage is above 90% for more than 2 minutes on instance {{ $labels.instance }}."
+#     - alert: HighDiskUsage
+#       expr: node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs"} / node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs"} * 100 < 10
+#       for: 5m
+#       labels:
+#         severity: warning
+#       annotations:
+#         summary: "Instance {{ $labels.instance }} high disk usage"
+#         description: "Disk space usage is above 90% for more than 5 minutes on instance {{ $labels.instance }}."
+#     - alert: NetworkInterfaceErrors
+#       expr: rate(node_network_receive_errs_total[5m]) > 1 or rate(node_network_transmit_errs_total[5m]) > 1
+#       for: 2m
+#       labels:
+#         severity: warning
+#       annotations:
+#         summary: "Instance {{ $labels.instance }} network interface errors"
+#         description: "Network interface errors detected on instance {{ $labels.instance }} for more then 2 minutes."
+
+#     # - alert: BTCIsDown
+#     #   expr: up{instance="btc_app:8000"} == 0
+#     #   for: 1m
+#     #   labels:
+#     #     severity: high
+#     #   annotations:
+#     #     summary: "Instance [{{ $labels.instance }}] is down - High"
+#     #     description: "[{{ $labels.instance }}] of job [{{ $labels.job }}] has been down for more than 1 minutes - High."
