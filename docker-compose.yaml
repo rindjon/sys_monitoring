@@ -37,6 +37,20 @@ services:
         aliases:
           - mon_exporter
 
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    networks:
+      monitoring:
+        aliases:
+          - nginx
+    volumes:
+      - ./nginx/config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_data:/var/log/error.log
+      - ./nginx/html:/usr/share/nginx/html:ro
+
 networks:
   monitoring:
     driver: bridge
@@ -44,3 +58,4 @@ networks:
 volumes:
   prometheus_data:
   grafana_data:
+  nginx_data:
