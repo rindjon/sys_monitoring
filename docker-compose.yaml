@@ -22,7 +22,7 @@ services:
     networks:
       monitoring:
         aliases:
-          - prometheus
+          - grafana
     volumes:
       - ./grafana/dashboards:/etc/grafana/dashboards
       - grafana_data:/var/lib/grafana
