@@ -26,7 +26,7 @@ services:
     volumes:
       - ./grafana/dashboards:/etc/grafana/dashboards
       - grafana_data:/var/lib/grafana
-      - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
+      # - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
     environment:
       - GF_SECURITY_ADMIN_USER=david
       - GF_SECURITY_ADMIN_PASSWORD=david
