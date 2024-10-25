@@ -1,2 +1,2 @@
 # sys_monitoring
-course mid project system monitoring
+devops course mid project - system monitoring side
